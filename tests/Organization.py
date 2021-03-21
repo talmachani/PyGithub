@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 ############################ Copyrights and license ############################
 #                                                                              #
 # Copyright 2012 Vincent Jacques <vincent@vincent-jacques.net>                 #
@@ -179,6 +177,10 @@ class Organization(Framework.TestCase):
             self.org.get_public_members(), lambda u: u.login, ["jacquev6"]
         )
 
+    def testGetHook(self):
+        hook = self.org.get_hook(257993)
+        self.assertEqual(hook.name, "web")
+
     def testGetHooks(self):
         self.assertListKeyEqual(self.org.get_hooks(), lambda h: h.id, [257993])
 
@@ -235,10 +237,14 @@ class Organization(Framework.TestCase):
     def testGetReposSorted(self):
         repos = self.org.get_repos(sort="updated", direction="desc")
         self.assertListKeyEqual(
-            repos, lambda r: r.name, ["TestPyGithub", "FatherBeaver"],
+            repos,
+            lambda r: r.name,
+            ["TestPyGithub", "FatherBeaver"],
         )
         self.assertListKeyEqual(
-            repos, lambda r: r.has_pages, [False, True],
+            repos,
+            lambda r: r.has_pages,
+            [False, True],
         )
 
     def testGetReposWithType(self):
@@ -381,8 +387,8 @@ class Organization(Framework.TestCase):
         self.assertEqual(
             raisedexp.exception.data,
             {
-                u"documentation_url": u"https://developer.github.com/v3/orgs/members/#create-organization-invitation",
-                u"message": u"You must be an admin to create an invitation to an organization.",
+                "documentation_url": "https://developer.github.com/v3/orgs/members/#create-organization-invitation",
+                "message": "You must be an admin to create an invitation to an organization.",
             },
         )
 
@@ -397,3 +403,11 @@ class Organization(Framework.TestCase):
     def testGetMigrations(self):
         self.org = self.g.get_organization("sample-test-organisation")
         self.assertEqual(self.org.get_migrations().totalCount, 2)
+
+    def testGetInstallations(self):
+        installations = self.org.get_installations()
+        self.assertEqual(installations[0].id, 123456)
+        self.assertEqual(installations[0].app_id, 10101)
+        self.assertEqual(installations[0].target_id, 3344556)
+        self.assertEqual(installations[0].target_type, "User")
+        self.assertEqual(installations.totalCount, 1)

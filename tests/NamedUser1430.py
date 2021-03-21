@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 ############################ Copyrights and license ############################
 #                                                                              #
 # Copyright 2020 Anuj Bansal <bansalanuj1996@gmail.com>                        #
@@ -32,5 +30,7 @@ class NamedUser1430(Framework.TestCase):
 
     def testGetProjects(self):
         self.assertListKeyBegin(
-            self.user.get_projects(state="all"), lambda e: e.id, [4083095],
+            self.user.get_projects(state="all"),
+            lambda e: e.id,
+            [4083095],
         )

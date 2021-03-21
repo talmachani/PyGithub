@@ -15,10 +15,7 @@ First create a Github instance::
 
     from github import Github
     
-    # using username and password
-    g = Github("user", "password")
-    
-    # or using an access token
+    # using an access token
     g = Github("access_token")
 
     # Github Enterprise with custom hostname
@@ -78,6 +75,7 @@ Projects using PyGithub
 * https://github.com/SOM-Research/Gitana - a SQL-based Project Activity Inspector
 * https://github.com/plus3it/satsuki - Automate GitHub releases and uploading binary release assets
 * `check-in <https://github.com/webknjaz/check-in>`_ — Python CLI distribution that allows user to use GitHub Checks API as a bot.
+* https://github.com/hasii2011/gittodoistclone - Convert GitHub issues to Todoist tasks
  
 They talk about PyGithub
 ------------------------

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 ############################ Copyrights and license ############################
 #                                                                              #
 # Copyright 2013 AKFish <akfish@gmail.com>                                     #
@@ -118,7 +116,10 @@ class Notification(github.GithubObject.CompletableGithubObject):
         """
         :calls: `PATCH /notifications/threads/:id <https://developer.github.com/v3/activity/notifications/>`_
         """
-        headers, data = self._requester.requestJsonAndCheck("PATCH", self.url,)
+        headers, data = self._requester.requestJsonAndCheck(
+            "PATCH",
+            self.url,
+        )
 
     def get_pull_request(self):
         """

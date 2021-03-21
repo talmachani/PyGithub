@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 ############################ Copyrights and license ############################
 #                                                                              #
 # Copyright 2015 Ed Holland <eholland@alertlogic.com>                          #
@@ -315,7 +313,7 @@ class GitRelease(github.GithubObject.CompletableGithubObject):
         return github.PaginatedList.PaginatedList(
             github.GitReleaseAsset.GitReleaseAsset,
             self._requester,
-            self.url + "/assets",
+            f"{self.url}/assets",
             None,
         )
 

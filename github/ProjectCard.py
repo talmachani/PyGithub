@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 ############################ Copyrights and license ############################
 #                                                                              #
 # Copyright 2018 bbi-yggy <yossarian@blackbirdinteractive.com>                 #
@@ -133,7 +131,7 @@ class ProjectCard(github.GithubObject.CompletableGithubObject):
             url = self.content_url
             retclass = github.Issue.Issue
         else:
-            raise ValueError("Unknown content type: %s" % content_type)
+            raise ValueError(f"Unknown content type: {content_type}")
         headers, data = self._requester.requestJsonAndCheck("GET", url)
         return retclass(self._requester, headers, data, completed=True)
 
@@ -156,7 +154,7 @@ class ProjectCard(github.GithubObject.CompletableGithubObject):
         }
         status, _, _ = self._requester.requestJson(
             "POST",
-            self.url + "/moves",
+            f"{self.url}/moves",
             input=post_parameters,
             headers={"Accept": Consts.mediaTypeProjectsPreview},
         )
@@ -168,7 +166,9 @@ class ProjectCard(github.GithubObject.CompletableGithubObject):
         :rtype: bool
         """
         status, _, _ = self._requester.requestJson(
-            "DELETE", self.url, headers={"Accept": Consts.mediaTypeProjectsPreview},
+            "DELETE",
+            self.url,
+            headers={"Accept": Consts.mediaTypeProjectsPreview},
         )
         return status == 204
 

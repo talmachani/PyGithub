@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # ########################## Copyrights and license ############################
 #                                                                              #
 # Copyright 2018 bbi-yggy <yossarian@blackbirdinteractive.com>                 #
@@ -171,14 +169,18 @@ class Project(Framework.TestCase):
         project = self.repo.create_project(
             "Project created by PyGithub", "Project Body"
         )
-        column = project.create_column("Project Column created by PyGithub",)
+        column = project.create_column(
+            "Project Column created by PyGithub",
+        )
         self.assertEqual(column.id, 3999333)
 
     def testCreateCardWithNote(self):
         project = self.repo.create_project(
             "Project created by PyGithub", "Project Body"
         )
-        column = project.create_column("Project Column created by PyGithub",)
+        column = project.create_column(
+            "Project Column created by PyGithub",
+        )
         card1 = column.create_card(note="Project Card")
         self.assertEqual(card1.id, 16039019)
 
@@ -186,7 +188,9 @@ class Project(Framework.TestCase):
         project = self.repo.create_project(
             "Project created by PyGithub", "Project Body"
         )
-        column = project.create_column("Project Column created by PyGithub",)
+        column = project.create_column(
+            "Project Column created by PyGithub",
+        )
         issue = self.repo.create_issue(title="Issue created by PyGithub")
         card2 = column.create_card(content_id=issue.id, content_type="Issue")
         self.assertEqual(card2.id, 16039106)

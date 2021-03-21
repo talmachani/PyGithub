@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 ############################ Copyrights and license ############################
 #                                                                              #
 # Copyright 2012 Andrew Bettison <andrewb@zip.com.au>                          #
@@ -24,6 +22,7 @@
 # Copyright 2018 per1234 <accounts@perglass.com>                               #
 # Copyright 2018 sfdye <tsfdye@gmail.com>                                      #
 # Copyright 2019 Nick Campbell <nicholas.j.campbell@gmail.com>                 #
+# Copyright 2020 Huan-Cheng Chang <changhc84@gmail.com>                        #
 #                                                                              #
 # This file is part of PyGithub.                                               #
 # http://pygithub.readthedocs.io/                                              #
@@ -302,7 +301,7 @@ class Issue(github.GithubObject.CompletableGithubObject):
             ]
         }
         headers, data = self._requester.requestJsonAndCheck(
-            "POST", self.url + "/assignees", input=post_parameters
+            "POST", f"{self.url}/assignees", input=post_parameters
         )
         self._useAttributes(data)
 
@@ -320,7 +319,7 @@ class Issue(github.GithubObject.CompletableGithubObject):
             for label in labels
         ]
         headers, data = self._requester.requestJsonAndCheck(
-            "POST", self.url + "/labels", input=post_parameters
+            "POST", f"{self.url}/labels", input=post_parameters
         )
 
     def create_comment(self, body):
@@ -334,7 +333,7 @@ class Issue(github.GithubObject.CompletableGithubObject):
             "body": body,
         }
         headers, data = self._requester.requestJsonAndCheck(
-            "POST", self.url + "/comments", input=post_parameters
+            "POST", f"{self.url}/comments", input=post_parameters
         )
         return github.IssueComment.IssueComment(
             self._requester, headers, data, completed=True
@@ -346,7 +345,7 @@ class Issue(github.GithubObject.CompletableGithubObject):
         :rtype: None
         """
         headers, data = self._requester.requestJsonAndCheck(
-            "DELETE", self.url + "/labels"
+            "DELETE", f"{self.url}/labels"
         )
 
     def edit(
@@ -430,7 +429,7 @@ class Issue(github.GithubObject.CompletableGithubObject):
         put_parameters["lock_reason"] = lock_reason
         headers, data = self._requester.requestJsonAndCheck(
             "PUT",
-            self.url + "/lock",
+            f"{self.url}/lock",
             input=put_parameters,
             headers={"Accept": Consts.mediaTypeLockReasonPreview},
         )
@@ -441,7 +440,7 @@ class Issue(github.GithubObject.CompletableGithubObject):
         :rtype: None
         """
         headers, data = self._requester.requestJsonAndCheck(
-            "DELETE", self.url + "/lock"
+            "DELETE", f"{self.url}/lock"
         )
 
     def get_comment(self, id):
@@ -452,7 +451,7 @@ class Issue(github.GithubObject.CompletableGithubObject):
         """
         assert isinstance(id, int), id
         headers, data = self._requester.requestJsonAndCheck(
-            "GET", self._parentUrl(self.url) + "/comments/" + str(id)
+            "GET", f"{self._parentUrl(self.url)}/comments/{id}"
         )
         return github.IssueComment.IssueComment(
             self._requester, headers, data, completed=True
@@ -473,7 +472,7 @@ class Issue(github.GithubObject.CompletableGithubObject):
         return github.PaginatedList.PaginatedList(
             github.IssueComment.IssueComment,
             self._requester,
-            self.url + "/comments",
+            f"{self.url}/comments",
             url_parameters,
         )
 
@@ -485,7 +484,7 @@ class Issue(github.GithubObject.CompletableGithubObject):
         return github.PaginatedList.PaginatedList(
             github.IssueEvent.IssueEvent,
             self._requester,
-            self.url + "/events",
+            f"{self.url}/events",
             None,
             headers={"Accept": Consts.mediaTypeLockReasonPreview},
         )
@@ -496,7 +495,7 @@ class Issue(github.GithubObject.CompletableGithubObject):
         :rtype: :class:`github.PaginatedList.PaginatedList` of :class:`github.Label.Label`
         """
         return github.PaginatedList.PaginatedList(
-            github.Label.Label, self._requester, self.url + "/labels", None
+            github.Label.Label, self._requester, f"{self.url}/labels", None
         )
 
     def remove_from_assignees(self, *assignees):
@@ -518,7 +517,7 @@ class Issue(github.GithubObject.CompletableGithubObject):
             ]
         }
         headers, data = self._requester.requestJsonAndCheck(
-            "DELETE", self.url + "/assignees", input=post_parameters
+            "DELETE", f"{self.url}/assignees", input=post_parameters
         )
         self._useAttributes(data)
 
@@ -534,7 +533,7 @@ class Issue(github.GithubObject.CompletableGithubObject):
         else:
             label = urllib.parse.quote(label)
         headers, data = self._requester.requestJsonAndCheck(
-            "DELETE", self.url + "/labels/" + label
+            "DELETE", f"{self.url}/labels/{label}"
         )
 
     def set_labels(self, *labels):
@@ -551,7 +550,7 @@ class Issue(github.GithubObject.CompletableGithubObject):
             for label in labels
         ]
         headers, data = self._requester.requestJsonAndCheck(
-            "PUT", self.url + "/labels", input=post_parameters
+            "PUT", f"{self.url}/labels", input=post_parameters
         )
 
     def get_reactions(self):
@@ -562,7 +561,7 @@ class Issue(github.GithubObject.CompletableGithubObject):
         return github.PaginatedList.PaginatedList(
             github.Reaction.Reaction,
             self._requester,
-            self.url + "/reactions",
+            f"{self.url}/reactions",
             None,
             headers={"Accept": Consts.mediaTypeReactionsPreview},
         )
@@ -579,11 +578,25 @@ class Issue(github.GithubObject.CompletableGithubObject):
         }
         headers, data = self._requester.requestJsonAndCheck(
             "POST",
-            self.url + "/reactions",
+            f"{self.url}/reactions",
             input=post_parameters,
             headers={"Accept": Consts.mediaTypeReactionsPreview},
         )
         return github.Reaction.Reaction(self._requester, headers, data, completed=True)
+
+    def delete_reaction(self, reaction_id):
+        """
+        :calls: `DELETE /repos/:owner/:repo/issues/:issue_number/reactions/:reaction_id <https://developer.github.com/v3/reactions/#delete-an-issue-reaction>`_
+        :param reaction_id: integer
+        :rtype: bool
+        """
+        assert isinstance(reaction_id, int), reaction_id
+        status, _, _ = self._requester.requestJson(
+            "DELETE",
+            f"{self.url}/reactions/{reaction_id}",
+            headers={"Accept": Consts.mediaTypeReactionsPreview},
+        )
+        return status == 204
 
     def get_timeline(self):
         """
@@ -593,7 +606,7 @@ class Issue(github.GithubObject.CompletableGithubObject):
         return github.PaginatedList.PaginatedList(
             github.TimelineEvent.TimelineEvent,
             self._requester,
-            self.url + "/timeline",
+            f"{self.url}/timeline",
             None,
             headers={"Accept": Consts.issueTimelineEventsPreview},
         )

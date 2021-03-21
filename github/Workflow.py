@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 ############################ Copyrights and license ############################
 #                                                                              #
 # Copyright 2020 Steve Kowalik <steven@wedontsleep.org>                        #
@@ -129,7 +127,7 @@ class Workflow(github.GithubObject.CompletableGithubObject):
         if inputs is github.GithubObject.NotSet:
             inputs = {}
         status, _, _ = self._requester.requestJson(
-            "POST", self.url + "/dispatches", input={"ref": ref, "inputs": inputs}
+            "POST", f"{self.url}/dispatches", input={"ref": ref, "inputs": inputs}
         )
         return status == 204
 
@@ -178,7 +176,7 @@ class Workflow(github.GithubObject.CompletableGithubObject):
         return github.PaginatedList.PaginatedList(
             github.WorkflowRun.WorkflowRun,
             self._requester,
-            self.url + "/runs",
+            f"{self.url}/runs",
             url_parameters,
             None,
             list_item="workflow_runs",

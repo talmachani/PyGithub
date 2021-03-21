@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 ############################ Copyrights and license ############################
 #                                                                              #
 # Copyright 2012 Vincent Jacques <vincent@vincent-jacques.net>                 #
@@ -61,5 +59,6 @@ class GitBlob(Framework.TestCase):
             "https://api.github.com/repos/jacquev6/PyGithub/git/blobs/53bce9fa919b4544e67275089b3ec5b44be20667",
         )
         self.assertEqual(
-            repr(self.blob), 'GitBlob(sha="53bce9fa919b4544e67275089b3ec5b44be20667")',
+            repr(self.blob),
+            'GitBlob(sha="53bce9fa919b4544e67275089b3ec5b44be20667")',
         )
